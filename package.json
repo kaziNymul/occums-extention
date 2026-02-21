@@ -1,0 +1,167 @@
+{
+  "name": "occums-razor-model-selector",
+  "displayName": "Occum's Razor — Smart Model Selector",
+  "description": "Automatically selects the simplest adequate Copilot model for each task using Occam's Razor principles.",
+  "version": "0.1.0",
+  "publisher": "YOUR_PUBLISHER_ID",
+  "license": "MIT",
+  "icon": "images/icon.png",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kaziNymul/occums-extention"
+  },
+  "homepage": "https://github.com/kaziNymul/occums-extention#readme",
+  "bugs": {
+    "url": "https://github.com/kaziNymul/occums-extention/issues"
+  },
+  "engines": {
+    "vscode": "^1.95.0"
+  },
+  "galleryBanner": {
+    "color": "#1a1a2e",
+    "theme": "dark"
+  },
+  "categories": [
+    "AI",
+    "Chat",
+    "Other"
+  ],
+  "keywords": [
+    "copilot",
+    "model-selection",
+    "occam",
+    "ai",
+    "chat",
+    "llm",
+    "auto-select"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "chatParticipants": [
+      {
+        "id": "occums.razor",
+        "fullName": "Occum's Razor",
+        "name": "occums",
+        "description": "Automatically selects the best Copilot model for your task — simplest one that gets the job done.",
+        "isSticky": true,
+        "commands": [
+          {
+            "name": "models",
+            "description": "List all available Copilot models and their capabilities"
+          },
+          {
+            "name": "analyze",
+            "description": "Analyze a task and show which model would be selected (without executing)"
+          },
+          {
+            "name": "config",
+            "description": "Show or change Occum's Razor preferences"
+          }
+        ]
+      }
+    ],
+    "commands": [
+      {
+        "command": "occums.showModels",
+        "title": "Occum's Razor: Show Available Models"
+      },
+      {
+        "command": "occums.analyzeTask",
+        "title": "Occum's Razor: Analyze Current Task"
+      },
+      {
+        "command": "occums.openChat",
+        "title": "Occum's Razor: Ask with Smart Model Selection"
+      },
+      {
+        "command": "occums.askSelection",
+        "title": "Occum's Razor: Ask About Selection"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "occums.openChat",
+        "key": "ctrl+shift+r",
+        "mac": "cmd+shift+r"
+      },
+      {
+        "command": "occums.askSelection",
+        "key": "ctrl+shift+alt+r",
+        "mac": "cmd+shift+alt+r",
+        "when": "editorHasSelection"
+      }
+    ],
+    "configuration": {
+      "title": "Occum's Razor",
+      "properties": {
+        "occums.headroom": {
+          "type": "number",
+          "default": 0.05,
+          "minimum": 0,
+          "maximum": 0.5,
+          "description": "Extra capability margin above minimum requirements (0 = exact match, 0.1 = 10% headroom)"
+        },
+        "occums.costWeight": {
+          "type": "number",
+          "default": 0.4,
+          "minimum": 0,
+          "maximum": 1,
+          "description": "How much to weigh cost in the simplicity score (0 = ignore, 1 = only cost)"
+        },
+        "occums.speedWeight": {
+          "type": "number",
+          "default": 0.35,
+          "minimum": 0,
+          "maximum": 1,
+          "description": "How much to weigh speed/latency in the simplicity score"
+        },
+        "occums.sizeWeight": {
+          "type": "number",
+          "default": 0.25,
+          "minimum": 0,
+          "maximum": 1,
+          "description": "How much to weigh model size in the simplicity score"
+        },
+        "occums.showReasoning": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show why a model was selected before each response"
+        },
+        "occums.preferredProvider": {
+          "type": "string",
+          "default": "",
+          "enum": [
+            "",
+            "openai",
+            "anthropic",
+            "google"
+          ],
+          "enumDescriptions": [
+            "No preference — pick from all providers",
+            "Prefer OpenAI models (GPT-4o, o1, etc.)",
+            "Prefer Anthropic models (Claude)",
+            "Prefer Google models (Gemini)"
+          ],
+          "description": "Optionally prefer models from a specific provider"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "lint": "eslint src --ext ts"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "@types/vscode": "^1.95.0",
+    "typescript": "^5.3.0"
+  },
+  "extensionDependencies": [
+    "github.copilot-chat"
+  ]
+}
